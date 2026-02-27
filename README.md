@@ -73,6 +73,73 @@ Client-server chat applications are versatile tools that facilitate real-time co
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
+## Program:
+server.py
+```python
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # helps restart quickly
+server.bind(('localhost', 9999))
+server.listen(1)
+print("Server listening on port 9999...")
+
+client, addr = server.accept()
+print(f"Connection from {addr}")
+
+done = False
+while not done:
+    msg = client.recv(1024).decode('utf-8')
+    if msg == 'quit':
+        done = True
+    else:
+        print("Client:", msg)
+
+    if not done:
+        reply = input("Server reply: ")
+        client.send(reply.encode('utf-8'))
+
+client.close()
+server.close()
+print("Server closed.")
+
+
+```
+
+client.py
+```python
+
+import socket
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+client.connect(("localhost", 9999))
+
+done=False
+
+while not done:
+    client.send(input("Message ").encode('utf-8'))
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        done=True
+    else:
+        print(msg)
+
+
+
+client.close()
+
+```
+
+## Output:
+server.py:
+
+<img width="1065" height="221" alt="image" src="https://github.com/user-attachments/assets/5ea2da38-716f-4877-98d5-508ca9e1b520" />
+
+client.py:
+
+<img width="1064" height="194" alt="image" src="https://github.com/user-attachments/assets/6afd2bed-b1c9-4825-ab18-b2c8a977f7ee" />
 
 ## Result:
 
